@@ -27,7 +27,6 @@ assistant_api_key = os.getenv("assistant_api_key")
 
 class GET_MESSAGE(Resource):
     def post(self):
-
         return jsonify( este_es_el_mensaje = request.json["message"])
 
 
