@@ -1,0 +1,4 @@
+export assistant_api_key = 'ylfuaZHvS5Yy-z_EP1D3JosGHsPWEQx0gixsiRH0pz0i'
+export assistant_url = 'https=//api.us-east.assistant.watson.cloud.ibm.com/instances/82bb23c0-cb3d-42e9-8e93-ee365da0a9e8'
+export assistant_version = '2019-02-28'
+export assistant_id = 'a68ebdc8-1434-4088-8cb4-8341199d543a'
