@@ -24,6 +24,8 @@ cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 request_data = {}
 
+
+
 def watson_create_session():
 
     iam_apikey = os.getenv("assistant_api_key")
@@ -96,7 +98,6 @@ def watson_response(session_id, message):
         del watson_response["context"]["global"]["session_id"]
     except:
         pass
-
     response = {
         "response": watson_response,
         "session_id": watson_session_id
@@ -117,11 +118,11 @@ def watson_instance(iam_apikey: str, url: str, version: str = "2019-02-28") -> A
         return jsonify({'error': str(error.message)}), error.code
 
     return assistant
-
+session = watson_create_session()
 class GET_MESSAGE(Resource):
     def post(self):
-        resp = watson_response(watson_create_session(),request.json["message"])
 
+        resp = watson_response(session,request.json["message"])
         return jsonify(
             text = resp["response"]["output"]["generic"][0]["text"]
         )
