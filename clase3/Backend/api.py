@@ -1,4 +1,7 @@
 # API
+import sys
+import pymongo
+
 import os
 import json
 import logging
@@ -24,7 +27,7 @@ cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 request_data = {}
 
-
+uri = "mongodb+srv://admin:Sabrina1998@cluster0.ajf2k.mongodb.net/cluster0?retryWrites=true&w=majority"
 
 def watson_create_session():
 
@@ -122,14 +125,27 @@ session = watson_create_session()
 class GET_MESSAGE(Resource):
     def post(self):
 
+        print("El mensaje del usuario es : "+request.json["message"]+".")
         resp = watson_response(session,request.json["message"])
+        print("El intent es : "+resp["response"]["output"]["intents"][0]["intent"]+".")
+
+        if not resp["response"]["output"]["entities"]:
+            entityBD = ""
+        else:
+            entityBD = resp["response"]["output"]["entities"][0]["value"]
+
+        SEED_DATA = [
+            { 'intent': resp["response"]["output"]["intents"][0]["intent"], 'mensaje': request.json["message"], 'entities': entityBD }]
+        client = pymongo.MongoClient(uri)
+        db = client.get_default_database()
+        mensajes_usuario = db['mensajes_usuario']
+        mensajes_usuario.insert_many(SEED_DATA)
+        client.close()
+
+
         return jsonify(
             text = resp["response"]["output"]["generic"][0]["text"]
         )
-        #message = request.json["message"]
-        #id = request.json["id"]
-        #print("el mensaje es: "+message+". id: "+id)
-        #return jsonify( este_es_el_mensaje = request.json["message"])
 
 api.add_resource(GET_MESSAGE, '/getMessage')  # Route_1
 
