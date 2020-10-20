@@ -1,7 +1,7 @@
 import React from 'react';
-import { Widget, addResponseMessage, renderCustomComponent } from "react-chat-widget";
+import { Widget, renderCustomComponent } from "react-chat-widget";
 import 'react-chat-elements/dist/main.css';
-import { MessageBox } from 'react-chat-elements'
+//import { MessageBox } from 'react-chat-elements'
 import ReactHtmlParser from 'react-html-parser'
 import axios from 'axios';
 

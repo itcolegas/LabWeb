@@ -5,21 +5,24 @@ import NavBar from "./Components/NavBar";
 import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import 'react-chat-widget/lib/styles.css'
 import Chat from "./Components/Chat";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export default function App(){
+    
+    const { isLoading, isAuthenticated, loginWithRedirect} = useAuth0();
+
     return(
       <Router>
         <NavBar />
         <Switch>
           <Route exact path="/">
-            <LandingPage />
+          {isLoading?  <p> Cargando </p> : isAuthenticated? <LandingPage/> : loginWithRedirect()}
           </Route>
           <Route path="/home">
             <Home />
           </Route>
         </Switch>
-        <Chat />
-        
+        <Chat />        
       </Router>
     );
 }

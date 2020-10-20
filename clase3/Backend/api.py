@@ -167,5 +167,12 @@ class GET_MESSAGE(Resource):
 
 api.add_resource(GET_MESSAGE, '/getMessage')  # Route_1
 
-if __name__ == '__main__':
-    app.run(port='5002')
+@app.route('/webhook', methods=['POST'])
+def respond():
+    print(request.json)
+    return Response(status=200)
+
+api.add_resource(respond, '/webhook')
+
+if __name__ == '__main__':s
+    app.run(port='4000')
