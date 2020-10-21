@@ -8,7 +8,7 @@ import Chat from "./Components/Chat";
 import { useAuth0 } from "@auth0/auth0-react";
 
 export default function App(){
-    
+
     const { isLoading, isAuthenticated, loginWithRedirect} = useAuth0();
 
     return(
@@ -16,13 +16,14 @@ export default function App(){
         <NavBar />
         <Switch>
           <Route exact path="/">
-          {isLoading?  <p> Cargando </p> : isAuthenticated? <LandingPage/> : loginWithRedirect()}
+          <LandingPage />
+          //{isLoading?  <p> Cargando </p> : isAuthenticated? <LandingPage/> : loginWithRedirect()}
           </Route>
           <Route path="/home">
             <Home />
           </Route>
         </Switch>
-        <Chat />        
+        <Chat />
       </Router>
     );
 }

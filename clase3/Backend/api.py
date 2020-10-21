@@ -19,6 +19,7 @@ from jsonschema import validate, ValidationError
 from ibm_watson import AssistantV2, ApiException
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from flask import jsonify
+from twilio.rest import Client
 
 load_dotenv()
 
@@ -165,14 +166,71 @@ class GET_MESSAGE(Resource):
 
         return jsonify( text = text)
 
+class GET_MESSAGEWA(Resource):
+    def post(self):
+
+        #TWILIO
+        number = request.form['From']
+        message_body = request.form['Body']
+
+        account_sid = 'ACb59160fe2c25c2b8764ed52d4da786a3'
+        auth_token = 'fe19c0322460ac08a2df059a8dd9c8c4'
+
+        clientwa = Client(account_sid, auth_token)
+
+        #WATSON
+        print("El mensaje del usuario de whastapp es : "+message_body+".")
+        resp = watson_response(session,message_body)
+
+        if not resp["response"]["output"]["intents"]:
+            message = clientwa.messages.create(
+              from_='whatsapp:+14155238886',
+              body="Disculpa no te entendi, \n ¿Podrias repetirlo?",
+              to=number
+            )
+
+        intent = resp["response"]["output"]["intents"][0]["intent"]
+        print("El intent de watson es : "+intent+".")
+
+        #MONGODB
+        client = pymongo.MongoClient(uri)
+        db = client.get_default_database()
+        mensajes_usuario = db['mensajes_usuario']
+        respuestas_bd = db['respuestasBalooBot']
+
+        if not resp["response"]["output"]["entities"]:
+            entityBD = ""
+        else:
+            entityBD = resp["response"]["output"]["entities"][0]["value"]
+            print("La entity es : "+entityBD)
+
+        if entityBD:
+            cursor = respuestas_bd.find({'intent': intent,'entity': entityBD })
+        else:
+            cursor = respuestas_bd.find({'intent': intent, 'entity': ''})
+
+        if cursor.count() == 0:
+            text = "Disculpa no te entendi, ¿Podrias repetirlo?"
+        else:
+            numerorespuesta = random.randint(0,cursor.count()-1)
+            text = cursor[numerorespuesta]["respuestaWA"] 
+
+        SEED_DATA = [
+            { 'intent': intent, 'mensajeWA': message_body, 'entities': entityBD }]
+
+        mensajes_usuario.insert_many(SEED_DATA)
+        client.close()
+
+
+        #TWILIO
+        message = clientwa.messages.create(
+          from_='whatsapp:+14155238886',
+          body= text.replace("-nl-","\n"),
+          to=number
+        )
+
 api.add_resource(GET_MESSAGE, '/getMessage')  # Route_1
+api.add_resource(GET_MESSAGEWA, '/getMessageWa')  # Route_2
 
-@app.route('/webhook', methods=['POST'])
-def respond():
-    print(request.json)
-    return Response(status=200)
-
-api.add_resource(respond, '/webhook')
-
-if __name__ == '__main__':s
+if __name__ == '__main__':
     app.run(port='4000')

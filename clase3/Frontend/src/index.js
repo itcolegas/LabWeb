@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Checklogin from './Components/Checklogin';
 import './index.css';
-import App from './App';
 import { Auth0Provider } from "@auth0/auth0-react";
 import * as serviceWorker from './serviceWorker';
+
 
 ReactDOM.render(
     <Auth0Provider
@@ -11,7 +12,7 @@ ReactDOM.render(
       clientId="qVNb9oB7Eg2yV0MEIkUOet4bNIMYfeDP"
       redirectUri={window.location.origin}
     >
-      <App />
+      <Checklogin />
     </Auth0Provider>,
   document.getElementById('root')
 );
