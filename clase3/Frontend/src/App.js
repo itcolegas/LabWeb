@@ -17,7 +17,7 @@ export default function App(){
         <Switch>
           <Route exact path="/">
           <LandingPage />
-          //{isLoading?  <p> Cargando </p> : isAuthenticated? <LandingPage/> : loginWithRedirect()}
+          {/*isLoading?  <p> Cargando </p> : isAuthenticated? <LandingPage/> : loginWithRedirect()*/}
           </Route>
           <Route path="/home">
             <Home />
