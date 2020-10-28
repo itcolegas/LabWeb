@@ -163,8 +163,10 @@ class GET_MESSAGE(Resource):
 
         mensajes_usuario.insert_many(SEED_DATA)
         client.close()
+        print(" --- PAYLOAD A FRONTEND ----")
+        print(jsonify( text = text, intent = intent).data)
 
-        return jsonify( text = text)
+        return jsonify( text = text, intent = intent)
 
 class GET_MESSAGEWA(Resource):
     def post(self):
