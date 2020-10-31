@@ -40,7 +40,6 @@ class Servicios extends React.Component{
       src="/images/almacenaje.jpg"
 
     />
-
     <Carousel.Caption>
       <h1>Almacenaje</h1>
     </Carousel.Caption>
