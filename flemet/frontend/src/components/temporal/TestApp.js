@@ -1,17 +1,16 @@
 import React from 'react';
-import NavBar from "../NavBar/NavBar";
-import {BrowserRouter as Router} from "react-router-dom";
+import NavBar from "./NavBaar";
+import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
 import 'react-chat-widget/lib/styles.css'
 import Chat from "../BalooBot/Chat";
-
-import Cotizador from "./layouts/Cotizador/Cotizador"
+import { useAuth0 } from "@auth0/auth0-react";
 
 export default function App(){
 
     return(
       <Router>
         <NavBar />
-        <Cotizador />
+        <p>¡Ya estás dentro! :D</p>
         <Chat />
       </Router>
     );

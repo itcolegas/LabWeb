@@ -1,29 +1,4 @@
 body {
     background-color: #231f1f;
+    font-family: "Questrial", Sans-serif;
 }
-
-.footer{
-    width: 100%;
-    height: 5rem;
-    text-align: center;
-    
-}
-
-.footer p{
-    margin-top: 1rem;
-    font-family: Questrial;
-    font-size: 1.2rem;
-    color: white;
-}
-
-@font-face{
-    font-family: Questrial;
-    src: url('./fonts/Questrial/Questrial-Regular.ttf');
-}
-
-@font-face{
-    font-family: Nunito;
-    src: url('./fonts/Nunito/Nunito-Regular.ttf');
-}
-
-

@@ -20,9 +20,6 @@ function App() {
       <NavBar/>
       <Home/>
       <Chat/>
-      <div className='footer'>
-        <p>Copyright © 2020 | ITColegas</p>
-      </div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 .navbar{
     width: 100%;
-    min-height: 6rem;
+    height: 6rem;
 }
 
 .navbar img{
@@ -9,51 +9,11 @@
 }
 
 .menu{
-    margin-right: 7rem;
+    margin-right: 12rem;
 }
 
 .nav_button{
-    color: white;
-    margin-left: 2rem;
-    font-family: 'Trebuchet MS';
-}
-
-.nav_logginButton{
+    color: white !important;
     margin-left: 2rem !important;
-}
-
-.nav_profile{
-    position: relative;
-    width: 27rem;
-    margin-right: 7rem;
-    display: inline-flex;
-    text-align: right;
-    color: white;
-}
-
-.nav_profile_text{
-    width: 75%;
-}
-
-.nav_profile_text h2{
-    font-size: 1rem;
-}
-
-.nav_profile_text p{
-    font-size: 0.8rem;
-}
-
-.nav_profile img{
-    margin-left: 0;
-    width: 5rem;
-    height: 5rem;
-}
-
-.nav_profile p{
-    color: white;
-}
-
-.avatar_img{
-    position: relative;
-    width:25%;
+    font-family: 'Trebuchet MS' !important;
 }
