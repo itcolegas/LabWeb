@@ -17,19 +17,37 @@ function Home(){
                 </div>
             </div>
             <div className='bg-solid bg2'>
-
+                <div className='white-back'>
+                    
+                </div>
             </div>
             <div className='bg-img bg3'>
+                <div className='company-mision'>
+                    <div className='side-column'>
 
+                    </div>
+                    <div className='center-column'>
+                        
+                    </div>
+                    <div className='side-column'>
+                        
+                    </div>
+                </div>
             </div>
             <div className='bg-solid bg4'>
-
+                <div className='white-back'>
+                    
+                </div>
             </div>
-            <div className='bg-solid '>
-
+            <div className='bg-logo bg5'>
+                <div className='blue-back'>
+                    
+                </div>
             </div>
-            <div className='bg-img bg5'>
-
+            <div className='bg-img bg6'>
+                <div className='white-back'>
+                    
+                </div>
             </div>
         </div>
     );
