@@ -75,7 +75,7 @@ class Chat extends React.Component {
     axios.post(`http://127.0.0.1:4000/getMessage`,{ message }).then((res) => {
       console.log(res.data);
       console.log("------------------");
-      if(res.data.intent == "PeticionServicio" && res.data.entity == ""){
+      if(res.data.intent == "PeticionServicio"){
         renderCustomComponent(Servicios, {text: res.data.text});
       }
       else{renderCustomComponent(Cheers, {text: res.data.text});}

@@ -166,7 +166,7 @@ class GET_MESSAGE(Resource):
         print(" --- PAYLOAD A FRONTEND ----")
         print(jsonify( text = text, intent = intent).data)
 
-        return jsonify( text = text, intent = intent, entity = entityBD)
+        return jsonify( text = text, intent = intent)
 
 class GET_MESSAGEWA(Resource):
     def post(self):
