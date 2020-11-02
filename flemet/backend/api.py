@@ -131,7 +131,7 @@ class GET_MESSAGE(Resource):
         resp = watson_response(session,request.json["message"])
 
         if not resp["response"]["output"]["intents"]:
-            return jsonify( text =  "<p>Disculpa no te entendi, ¿Podrias repetirlo?</p>")
+            return jsonify( text =  "<p>Sigo aprendiendo para entender eso. ¿Podrías intentarlo de otra forma? :)</p>")
 
         print("El intent de watson es : "+resp["response"]["output"]["intents"][0]["intent"]+".")
         intent = resp["response"]["output"]["intents"][0]["intent"]
@@ -153,7 +153,7 @@ class GET_MESSAGE(Resource):
             cursor = respuestas_bd.find({'intent': intent, 'entity': ''})
 
         if cursor.count() == 0:
-            text = "<p>Disculpa no te entendi, ¿Podrias repetirlo?</p>"
+            text = "<p>Sigo aprendiendo para entender eso. ¿Podrías intentarlo de otra forma? :)</p>"
         else:
             numerorespuesta = random.randint(0,cursor.count()-1)
             text = cursor[numerorespuesta]["respuesta"]
@@ -166,7 +166,7 @@ class GET_MESSAGE(Resource):
         print(" --- PAYLOAD A FRONTEND ----")
         print(jsonify( text = text, intent = intent).data)
 
-        return jsonify( text = text, intent = intent)
+        return jsonify( text = text, intent = intent, entity = entityBD)
 
 class GET_MESSAGEWA(Resource):
     def post(self):
@@ -175,8 +175,8 @@ class GET_MESSAGEWA(Resource):
         number = request.form['From']
         message_body = request.form['Body']
 
-        account_sid = 'ACb59160fe2c25c2b8764ed52d4da786a3'
-        auth_token = 'fe19c0322460ac08a2df059a8dd9c8c4'
+        account_sid = os.getenv("whatsapp_sid")
+        auth_token = os.getenv("whatsapp_secret")
 
         clientwa = Client(account_sid, auth_token)
 
@@ -186,8 +186,8 @@ class GET_MESSAGEWA(Resource):
 
         if not resp["response"]["output"]["intents"]:
             message = clientwa.messages.create(
-              from_='whatsapp:+14155238886',
-              body="Disculpa no te entendi, \n ¿Podrias repetirlo?",
+              from_='+14155238886',
+              body="Sigo aprendiendo para entender eso. ¿Podrías intentarlo de otra forma? :)",
               to=number
             )
 
@@ -212,10 +212,18 @@ class GET_MESSAGEWA(Resource):
             cursor = respuestas_bd.find({'intent': intent, 'entity': ''})
 
         if cursor.count() == 0:
-            text = "Disculpa no te entendi, ¿Podrias repetirlo?"
+            if intent == 'Cotizador':
+                message = clientwa.messages.create(
+                  from_='whatsapp:+14155238886',
+                  body= "Aun estoy aprendiendo a cotizar, te envio un pdf con nuestros costos",
+                  media_url = ['http://www.pdf995.com/samples/pdf.pdf'],
+                  to=number
+                )
+            else:
+                text = "Sigo aprendiendo para entender eso. ¿Podrías intentarlo de otra forma? :)"
         else:
             numerorespuesta = random.randint(0,cursor.count()-1)
-            text = cursor[numerorespuesta]["respuestaWA"] 
+            text = cursor[numerorespuesta]["respuestaWA"]
 
         SEED_DATA = [
             { 'intent': intent, 'mensajeWA': message_body, 'entities': entityBD }]
