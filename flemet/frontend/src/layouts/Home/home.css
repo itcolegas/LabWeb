@@ -9,6 +9,7 @@
 }
 
 .white-back{
+    position: relative;
     width: 100%;
     height: 100%;
     background-color: rgba(255, 255, 255, 0.774);
@@ -27,6 +28,7 @@
 }
 
 .center-column{
+    position: relative;
     display: inline-flex;
     width: calc(100%/3);
     height: 100%;
@@ -34,10 +36,91 @@
 }
 
 .side-column{
+    position: relative;
     display: inline-flex;
     width: calc(100%/3);
     height: 100%;
     background-color: rgba(14, 96, 171, 0.86)
+}
+
+.three-blocks{
+    position: absolute;
+    display: inline-flex;
+    width: 80%;
+    height: 60%;
+    top: 20%;
+    left: 10%;
+}
+
+.left-block{
+    position: relative;
+    width: 49%;
+    height: 100%;
+}
+
+.left-text{
+    position: absolute;
+    left: 2rem;
+    right: 7rem;
+    top: 4rem;
+    text-align: right;
+}
+
+.left-block h1{
+    font-family: Questrial;
+    font-weight: bold;
+    font-size: 3rem;
+    color: rgba(26, 31, 75);
+}
+
+.right-block{
+    position: relative;
+    width: 49%;
+    height: 100%;
+}
+
+.right-text{
+    position: absolute;
+    top: 3.5rem;
+    left: 1rem;
+    text-align: left;
+    font-size: 1.1rem;
+    font-family: Nunito;
+    line-height: 2rem;
+    color: rgb(119, 119, 119);
+}
+
+.vl{
+    width: 2%;
+    border-left: 0.2rem solid rgba(14, 96, 171);
+    height: 95%;
+    margin-top: 0.5rem;
+}
+
+.column-container{
+    position: absolute;
+    left: 5%;
+    top: 15%;
+    width: 90%;
+    height: 70%;
+    color: white;
+    font-family: Nunito;
+    text-align: center;
+}
+
+.column-container p{
+    font-size: 1.1rem;
+}
+
+.column-container ul{
+    font-size: 1.1rem;
+    text-align: left;
+    margin-left: 20%;
+}
+
+.column-container h1{
+    font-family: Questrial;
+    font-weight: bold;
 }
 
 .welcome-text{
@@ -49,16 +132,19 @@
     left: 10%;
     font-family: Nunito;
     font-size: 1.2rem;
+    
 }
 
 .title_1{
     font-family: Questrial;
+    font-weight: bold;
     font-size: 4rem;
     color: #0E60AB;
 }
 
 .title_2{
     font-family: Questrial;
+    font-weight: bold;
     font-size: 4rem;
     color: white;
 }
@@ -108,6 +194,6 @@
 
 .bg6{
     background: url("./images/bg/contacto2.jpg") no-repeat center fixed;
-    height: 39rem;
+    height: 45rem;
 }
 

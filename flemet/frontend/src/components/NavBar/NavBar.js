@@ -2,7 +2,7 @@
 import React from 'react';
 
 //Extensions
-import { Button, Avatar } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import { useAuth0 } from "@auth0/auth0-react";
 
 //Styles
