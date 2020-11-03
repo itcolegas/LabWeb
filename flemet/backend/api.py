@@ -175,8 +175,8 @@ class GET_MESSAGEWA(Resource):
         number = request.form['From']
         message_body = request.form['Body']
 
-        account_sid = os.getenv("whatsapp_sid")
-        auth_token = os.getenv("whatsapp_secret")
+        account_sid = 'AC4cea7614c619927017a20f2e8ea2feeb'
+        auth_token = 'c789077b4c98d0757b59a20ca8864eae'
 
         clientwa = Client(account_sid, auth_token)
 
@@ -184,12 +184,15 @@ class GET_MESSAGEWA(Resource):
         print("El mensaje del usuario de whastapp es : "+message_body+".")
         resp = watson_response(session,message_body)
 
-        if not resp["response"]["output"]["intents"]:
+        if len(resp["response"]["output"]["intents"]) == 0:
+            text = "Sigo aprendiendo para entender eso. ¿Podrías intentarlo de otra forma? :)"
             message = clientwa.messages.create(
-              from_='+14155238886',
-              body="Sigo aprendiendo para entender eso. ¿Podrías intentarlo de otra forma? :)",
+              from_='whatsapp:+14155238886',
+              body=text,
+              media_url = ['https://s3-eu-west-1.amazonaws.com/userlike-cdn-blog/do-i-need-a-chatbot/header-chat-box.png'],
               to=number
             )
+            return
 
         intent = resp["response"]["output"]["intents"][0]["intent"]
         print("El intent de watson es : "+intent+".")
@@ -213,10 +216,11 @@ class GET_MESSAGEWA(Resource):
 
         if cursor.count() == 0:
             if intent == 'Cotizador':
+                text = "Aún estoy aprendiendo a cotizar, te envío un pdf con nuestros costos."
                 message = clientwa.messages.create(
                   from_='whatsapp:+14155238886',
-                  body= "Aun estoy aprendiendo a cotizar, te envio un pdf con nuestros costos",
-                  media_url = ['http://www.pdf995.com/samples/pdf.pdf'],
+                  body= "Tarifario.pdf",
+                  media_url = ['https://uploadpie.com/LWYKHK'],
                   to=number
                 )
             else:
@@ -231,13 +235,24 @@ class GET_MESSAGEWA(Resource):
         mensajes_usuario.insert_many(SEED_DATA)
         client.close()
 
-
         #TWILIO
-        message = clientwa.messages.create(
-          from_='whatsapp:+14155238886',
-          body= text.replace("-nl-","\n"),
-          to=number
-        )
+        if intent == 'Bienvenida':
+            message = clientwa.messages.create(
+              from_='whatsapp:+14155238886',
+              body= text.replace("-nl-","\n"),
+              to=number
+            )
+            message = clientwa.messages.create(
+              from_='whatsapp:+14155238886',
+              body= '😄',
+              to=number
+            )
+        else:
+            message = clientwa.messages.create(
+              from_='whatsapp:+14155238886',
+              body= text.replace("-nl-","\n"),
+              to=number
+            )
 
 api.add_resource(GET_MESSAGE, '/getMessage')  # Route_1
 api.add_resource(GET_MESSAGEWA, '/getMessageWa')  # Route_2
