@@ -25,38 +25,42 @@ class Servicios extends React.Component{
       <div className='speech-bubble'>
         {ReactHtmlParser(this.props.text)}
         <Carousel>
-  <Carousel.Item>
-    <img
-      className="d-block w-100"
-      src="/images/transporte.jpg"
-      alt="tranporte"
-    />
-    <Carousel.Caption>
-      <h1>Transporte</h1>
-    </Carousel.Caption>
-  </Carousel.Item>
-  <Carousel.Item>
-    <img
-      className="d-block w-100"
-      src="/images/almacenaje.jpg"
-      alt="almacenaje"
-    />
-    <Carousel.Caption>
-      <h1>Almacenaje</h1>
-    </Carousel.Caption>
-  </Carousel.Item>
-  <Carousel.Item>
-    <img
-      className="d-block w-100"
-      src="/images/consultoria.png"
-      alt="consultoria"
-    />
 
-    <Carousel.Caption>
-      <h1>Consultoria</h1>
-    </Carousel.Caption>
-  </Carousel.Item>
-</Carousel>
+          <Carousel.Item>
+            <img
+              className="d-block w-100"
+              src="/images/transporte.jpg"
+              alt="tranporte"
+            />
+            <Carousel.Caption>
+              <h1>Transporte</h1>
+            </Carousel.Caption>
+          </Carousel.Item>
+
+          <Carousel.Item>
+            <img
+              className="d-block w-100"
+              src="/images/almacenaje.jpg"
+              alt="almacenaje"
+            />
+            <Carousel.Caption>
+              <h1>Almacenaje</h1>
+            </Carousel.Caption>
+          </Carousel.Item>
+
+          <Carousel.Item>
+            <img
+              className="d-block w-100"
+              src="/images/consultoria.png"
+              alt="consultoria"
+            />
+
+            <Carousel.Caption>
+              <h1>Consultoría</h1>
+            </Carousel.Caption>
+          </Carousel.Item>
+          
+        </Carousel>
       </div>
       
     );
@@ -86,8 +90,8 @@ class Chat extends React.Component {
     return(
       <Widget
         handleNewUserMessage={this.handleNewUserMessage}
-        title="ChatBot"
-        subtitle="Pregúntame lo que quieras"
+        title="BALOOBOT"
+        subtitle="Estoy para ayudarte"
       >
       </Widget>
     )

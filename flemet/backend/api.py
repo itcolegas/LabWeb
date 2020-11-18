@@ -175,8 +175,8 @@ class GET_MESSAGEWA(Resource):
         number = request.form['From']
         message_body = request.form['Body']
 
-        account_sid = 'AC4cea7614c619927017a20f2e8ea2feeb'
-        auth_token = 'c789077b4c98d0757b59a20ca8864eae'
+        account_sid = ''
+        auth_token = ''
 
         clientwa = Client(account_sid, auth_token)
 
