@@ -175,8 +175,8 @@ class GET_MESSAGEWA(Resource):
         number = request.form['From']
         message_body = request.form['Body']
 
-        account_sid = ''
-        auth_token = ''
+        account_sid = os.getenv("whatsapp_sid")
+        auth_token = os.getenv("whatsapp_secret")
 
         clientwa = Client(account_sid, auth_token)
 
