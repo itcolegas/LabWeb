@@ -183,6 +183,12 @@ class GET_MESSAGEWA(Resource):
 
         clientwa = Client(account_sid, auth_token)
 
+        #MONGODB
+        client = pymongo.MongoClient(uri)
+        db = client.get_default_database()
+        mensajes_usuario = db['mensajes_usuario']
+        respuestas_bd = db['respuestasBalooBot']
+
         try:
             latitude, longitude = request.form['Latitude'], request.form['Longitude']
 
@@ -190,90 +196,100 @@ class GET_MESSAGEWA(Resource):
 
             location = location.json()
 
+            place = location['features'][0]['context'][1]['text']
+            print(place)
+
+            SEED_DATALL = [
+                { 'place': place, 'location': location['features'][0]['place_name'],'longitude': longitude, 'latitude': latitude }]
+
+            mensajes_usuario.insert_many(SEED_DATALL)
+
+            randomcost = random.randint(110.00,250.00)
+            print(randomcost)
             #Aquí va el mensaje
             print('Tu dirección es: ', location['features'][0]['place_name'])
             message = clientwa.messages.create(
               from_='whatsapp:+14155238886',
-              body= 'Tu dirección es: ' + location['features'][0]['place_name'],
+              body= 'El costo estimado a tu dirección: ' + location['features'][0]['place_name'] + '\nEs $'+str(randomcost)+' pesos.\nPara más información del envío contactar a un agente: contacto@flemet.com.mx',
               to=number
             )
-            
+
         except:
-            print('No hay ubicación')
 
-        #WATSON
-        print("El mensaje del usuario de whastapp es : "+message_body+".")
-        resp = watson_response(session,message_body)
+            #WATSON
+            print("El mensaje del usuario de whastapp es : "+message_body+".")
+            resp = watson_response(session,message_body)
 
-        if len(resp["response"]["output"]["intents"]) == 0:
-            text = "Sigo aprendiendo para entender eso. ¿Podrías intentarlo de otra forma? :)"
-            message = clientwa.messages.create(
-              from_='whatsapp:+14155238886',
-              body=text,
-              media_url = ['https://s3-eu-west-1.amazonaws.com/userlike-cdn-blog/do-i-need-a-chatbot/header-chat-box.png'],
-              to=number
-            )
-            return
-
-        intent = resp["response"]["output"]["intents"][0]["intent"]
-        print("El intent de watson es : "+intent+".")
-
-        #MONGODB
-        client = pymongo.MongoClient(uri)
-        db = client.get_default_database()
-        mensajes_usuario = db['mensajes_usuario']
-        respuestas_bd = db['respuestasBalooBot']
-
-        if not resp["response"]["output"]["entities"]:
-            entityBD = ""
-        else:
-            entityBD = resp["response"]["output"]["entities"][0]["value"]
-            print("La entity es : "+entityBD)
-
-        if entityBD:
-            cursor = respuestas_bd.find({'intent': intent,'entity': entityBD })
-        else:
-            cursor = respuestas_bd.find({'intent': intent, 'entity': ''})
-
-        if cursor.count() == 0:
-            if intent == 'Cotizador':
-                text = "Aún estoy aprendiendo a cotizar, te envío un pdf con nuestros costos."
+            if len(resp["response"]["output"]["intents"]) == 0:
+                text = "Sigo aprendiendo para entender eso. ¿Podrías intentarlo de otra forma? :)"
                 message = clientwa.messages.create(
                   from_='whatsapp:+14155238886',
-                  body= "Tarifario.pdf",
-                  media_url = ['https://uploadpie.com/LWYKHK'],
+                  body=text,
+                  media_url = ['https://s3-eu-west-1.amazonaws.com/userlike-cdn-blog/do-i-need-a-chatbot/header-chat-box.png'],
+                  to=number
+                )
+                return
+
+            intent = resp["response"]["output"]["intents"][0]["intent"]
+            print("El intent de watson es : "+intent+".")
+
+            #MONGODB
+
+            if not resp["response"]["output"]["entities"]:
+                entityBD = ""
+            else:
+                entityBD = resp["response"]["output"]["entities"][0]["value"]
+                print("La entity es : "+entityBD)
+
+            if entityBD:
+                cursor = respuestas_bd.find({'intent': intent,'entity': entityBD })
+            else:
+                cursor = respuestas_bd.find({'intent': intent, 'entity': ''})
+
+            if cursor.count() == 0:
+                if intent == 'Cotizador':
+                    text = "Aún estoy aprendiendo a cotizar, te envío un pdf con nuestros costos. \nTambién puedes mandarme tu ubicación para conocer el costo de envío a tu dirección."
+                    message = clientwa.messages.create(
+                      from_='whatsapp:+14155238886',
+                      body= "Tarifario.pdf",
+                      media_url = ['https://uploadpie.com/FgAJsY'],
+                      to=number
+                    )
+                else:
+                    text = "Sigo aprendiendo para entender eso. ¿Podrías intentarlo de otra forma? :)"
+            else:
+                numerorespuesta = random.randint(0,cursor.count()-1)
+                text = cursor[numerorespuesta]["respuestaWA"]
+
+            SEED_DATA = [
+                { 'intent': intent, 'mensajeWA': message_body, 'entities': entityBD }]
+
+            mensajes_usuario.insert_many(SEED_DATA)
+            client.close()
+
+            #TWILIO
+            if intent == 'Bienvenida':
+                message = clientwa.messages.create(
+                  from_='whatsapp:+14155238886',
+                  body= text.replace("-nl-","\n"),
+                  to=number
+                )
+                message = clientwa.messages.create(
+                  from_='whatsapp:+14155238886',
+                  body= 'Si quieres conocer el costo de envío a tu dirección puedes mandarme tu ubicación.',
+                  to=number
+                )
+                message = clientwa.messages.create(
+                  from_='whatsapp:+14155238886',
+                  body= '😄',
                   to=number
                 )
             else:
-                text = "Sigo aprendiendo para entender eso. ¿Podrías intentarlo de otra forma? :)"
-        else:
-            numerorespuesta = random.randint(0,cursor.count()-1)
-            text = cursor[numerorespuesta]["respuestaWA"]
-
-        SEED_DATA = [
-            { 'intent': intent, 'mensajeWA': message_body, 'entities': entityBD }]
-
-        mensajes_usuario.insert_many(SEED_DATA)
-        client.close()
-
-        #TWILIO
-        if intent == 'Bienvenida':
-            message = clientwa.messages.create(
-              from_='whatsapp:+14155238886',
-              body= text.replace("-nl-","\n"),
-              to=number
-            )
-            message = clientwa.messages.create(
-              from_='whatsapp:+14155238886',
-              body= '😄',
-              to=number
-            )
-        else:
-            message = clientwa.messages.create(
-              from_='whatsapp:+14155238886',
-              body= text.replace("-nl-","\n"),
-              to=number
-            )
+                message = clientwa.messages.create(
+                  from_='whatsapp:+14155238886',
+                  body= text.replace("-nl-","\n"),
+                  to=number
+                )
 
 api.add_resource(GET_MESSAGE, '/getMessage')  # Route_1
 api.add_resource(GET_MESSAGEWA, '/getMessageWa')  # Route_2
