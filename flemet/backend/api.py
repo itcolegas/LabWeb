@@ -175,10 +175,31 @@ class GET_MESSAGEWA(Resource):
         number = request.form['From']
         message_body = request.form['Body']
 
+        print(request.form)
+
         account_sid = os.getenv("whatsapp_sid")
         auth_token = os.getenv("whatsapp_secret")
+        mapbox_token = os.getenv("mapbox_token")
 
         clientwa = Client(account_sid, auth_token)
+
+        try:
+            latitude, longitude = request.form['Latitude'], request.form['Longitude']
+
+            location = requests.get('https://api.mapbox.com/geocoding/v5/mapbox.places/'+longitude+'%2C'+latitude+'.json?access_token='+mapbox_token)
+
+            location = location.json()
+
+            #Aquí va el mensaje
+            print('Tu dirección es: ', location['features'][0]['place_name'])
+            message = clientwa.messages.create(
+              from_='whatsapp:+14155238886',
+              body= 'Tu dirección es: ' + location['features'][0]['place_name'],
+              to=number
+            )
+            
+        except:
+            print('No hay ubicación')
 
         #WATSON
         print("El mensaje del usuario de whastapp es : "+message_body+".")
